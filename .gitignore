@@ -1,0 +1,6 @@
+/.ipynb_checkpoints
+/debug.ipynb
+/Simple rule label detection.ipynb
+/Untitled.ipynb
+# Project exclude paths
+/.venv1/
