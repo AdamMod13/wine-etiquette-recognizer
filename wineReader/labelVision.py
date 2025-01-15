@@ -7,8 +7,6 @@ import easyocr
 import PIL.Image
 from math import ceil
 
-# Copyright notice: a part of the code is pulled from https://github.com/Nepherhotep/unwrap_labels with the author autorisation.
-
 BLACK_COLOR = (0, 0, 0)
 WHITE_COLOR = (255, 255, 255)
 YELLOW_COLOR = (0, 255, 255)
