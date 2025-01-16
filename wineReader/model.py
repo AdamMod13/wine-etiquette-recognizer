@@ -13,6 +13,7 @@ class Unet:
     # class made to build, compile, train and predict with the u-net model
     # must pass config as argument
 
+    # Metoda budująca model UNet
     def build_model(self, Config):
         
         inputs = tf.keras.layers.Input((256,256,3))
@@ -74,6 +75,7 @@ class Unet:
         return model
 
 
+    # Metoda ćwicząca model z odpowiednimi ustawieniami
     def fit(self,X_train,X_valid,y_train,y_valid,Config):
 
         model=self.build_model(Config)
@@ -97,6 +99,7 @@ class Unet:
 
         model.save("./models/unet.h5")
 
+    # Metoda której zadaniem jest zapisanie 'raw' maski (etykiety)
     def predict(self, X, model, fileNames, Config):
         
         mask_vectors = model.predict(X)

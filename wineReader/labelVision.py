@@ -378,6 +378,7 @@ class labelVision:
     def __init__(self, Config):
         self.Config = Config
 
+    # Metoda obracająca zdjęcie tak aby etykieta była pionowo
     def align_vertically(self, src, mask):
             
             # img must be grayscale 2D numpy array
@@ -416,6 +417,7 @@ class labelVision:
             
             return src, mask
 
+    # Metoda odnajdująca 6 punktów cylindra (etykiety) za pomocą prostych pomocniczych
     def getCylinderPoints(self, mask):
 
         # Const
@@ -545,6 +547,7 @@ class labelVision:
 
         return shape, mask
 
+    # Metoda rozwijająca etykiete tak aby zajmowała obszar całego obrazu (w celu łatwiejszego odczytania tekstu)
     def unwrapLabel(self, src, shape):
 
         points = []
@@ -561,14 +564,15 @@ class labelVision:
 
         return src, dst_image
 
+    # Metoda rozpoznająca tekst z przekazanych jako argument zdjęć (easyOCR)
     def ocr(self, src, unwrapped):
-        # Optical character recognition
         reader = easyocr.Reader(['en'])
         src_ocr = ";".join(reader.readtext(src, detail=0))
         unwrapped_ocr = ";".join(reader.readtext(unwrapped, detail=0))
 
         return unwrapped_ocr, src_ocr
 
+    # Metoda zapisująca poszczególne etapy obróbki zdjęcia do odpowiednich plików
     def readLabels(self, unet_output, srcs, fileNames):
 
         for mask, src, filename in zip(unet_output, srcs, fileNames):
@@ -577,6 +581,7 @@ class labelVision:
             mask=cv2.resize(mask,(src.shape[1],src.shape[0]))
             mask = np.round(mask) #binary transform
 
+            # Resizing binary mask image
             save_img(self.Config['results_path'] + filename + "/3_resize_binary_mask.jpg", mask)
 
             # rotate
@@ -594,7 +599,7 @@ class labelVision:
             cv2.imwrite(self.Config['results_path'] + filename + "/7_mesh.jpg", mesh)
             cv2.imwrite(self.Config['results_path'] + filename + "/8_unwrapped.jpg", unwrapped)
 
-            # tesseract ocr
+            # easy ocr
             unwrapped_ocr, src_ocr = self.ocr(src, unwrapped)
             to_write_unw_ocr=open(self.Config['results_path'] + filename + "/9_unwrapped_ocr.txt",'w')
             to_write_unw_ocr.write(unwrapped_ocr)
